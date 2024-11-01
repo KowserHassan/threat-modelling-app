@@ -16,7 +16,6 @@ This project leverages Amazon's open-source Threat Composer Tool to simplify thr
 - **CI/CD:** GitHub Actions
 - **Languages:** Python 
 
-
 ## Local app setup 💻
 
 ```bash
