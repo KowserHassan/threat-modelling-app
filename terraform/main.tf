@@ -268,5 +268,5 @@ resource "aws_route53_record" "tm_record" {
   name    = "tm"
   type    = "CNAME"
   ttl     = 300
-  records = [data.aws_lb.threat-app-alb.dns_name]
+  records = [data.aws_lb.threat_app_lb.dns_name]
 }
