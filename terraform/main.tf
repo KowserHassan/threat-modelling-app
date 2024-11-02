@@ -258,7 +258,7 @@ data "aws_route53_zone" "lab_zone" {
 }
 
 # Fetch ALB DNS name dynamically
-data "aws_lb" "threat-app-alb" {
+data "aws_lb" "threat_app_lb" {
   name = "threat-app-alb"
 }
 
