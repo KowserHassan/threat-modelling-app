@@ -257,16 +257,12 @@ data "aws_route53_zone" "lab_zone" {
   name = "kowserhassan.com"
 }
 
-# Fetch ALB DNS name dynamically
-data "aws_lb" "threat_app_lb" {
-  name = "threat-app-alb"
-}
-
 # Create a record for the ALB
 resource "aws_route53_record" "tm_record" {
   zone_id = data.aws_route53_zone.lab_zone.id
   name    = "tm"
   type    = "CNAME"
   ttl     = 300
-  records = [data.aws_lb.threat_app_lb.dns_name]
+  records = [aws_lb.threat_app_lb.dns_name]
 }
+
