@@ -111,7 +111,7 @@ resource "aws_ecs_task_definition" "threatservice" {
   memory                   = 3072
 
   runtime_platform {
-    cpu_architecture        = "X86_64"
+    cpu_architecture        = "ARM64"
     operating_system_family = "LINUX"
   }
 
@@ -177,10 +177,6 @@ resource "aws_lb_target_group" "threatapptg" {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     protocol            = "HTTP"
-  }
-
-  lifecycle {
-    prevent_destroy = true
   }
 
   depends_on = [aws_lb.threat_app_lb]
@@ -254,4 +250,23 @@ data "aws_iam_role" "ecs_task_execution_role" {
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
   role       = data.aws_iam_role.ecs_task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+# Fetch the existing Route 53 zone
+data "aws_route53_zone" "lab_zone" {
+  name = "kowserhassan.com"
+}
+
+# Fetch ALB DNS name dynamically
+data "aws_lb" "threat-app-alb" {
+  name = "threat-app-alb"
+}
+
+# Create a record for the ALB
+resource "aws_route53_record" "tm_record" {
+  zone_id = data.aws_route53_zone.lab_zone.id
+  name    = "tm"
+  type    = "CNAME"
+  ttl     = 300
+  records = [data.aws_lb.threat-app-alb.dns_name]
 }
